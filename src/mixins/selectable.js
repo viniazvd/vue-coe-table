@@ -13,7 +13,7 @@ const selectable = {
   },
 
   methods: {
-    handlerCheckedAll () {
+    $handlerCheckedAll () {
       this.allChecked = !this.allChecked
 
       this.allChecked

@@ -2,7 +2,7 @@ import isNumber from '../helpers/isNumber'
 
 const sortable = {
   methods: {
-    handlerSortOne (row, index) {
+    $handlerSortOne (row, index) {
       this._cols.map((_col, _index) => {
         _index === index && _col.iconToSort === '▼'
           ? _col.iconToSort = '▲'
@@ -33,7 +33,7 @@ const sortable = {
       })
     },
 
-    handlerSortAll (row) {
+    $handlerSortAll (row) {
       this.iconToSortAll === '▼' ? this.iconToSortAll = '▲' : this.iconToSortAll = '▼'
 
       const newOrder = this._rows

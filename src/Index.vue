@@ -2,7 +2,7 @@
   <table v-if="hasValid" id="app" class="c-table-builder" :style="tableStyle">
     <tr class="tr-col" :style="trColStyle">
       <th v-if="selectable">
-        <input type="checkbox" @click="handlerCheckedAll()" />
+        <input type="checkbox" @click="$handlerCheckedAll()" />
       </th>
 
       <slot name="col" :cols="cols">
@@ -15,7 +15,7 @@
           <span
             v-if="sortable && sortable.all"
             class="icon-sortable-all"
-            @click="handlerSortAll(row)"
+            @click="$handlerSortAll(row)"
           >
             {{ iconToSortAll }}
           </span>
@@ -25,7 +25,7 @@
           <span
             v-if="sortable && sortable.one"
             class="icon-sortable-one"
-            @click="handlerSortOne(row, index)"
+            @click="$handlerSortOne(row, index)"
           >
             {{ iconToSortOne }}
           </span>
