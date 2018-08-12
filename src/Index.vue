@@ -185,6 +185,10 @@ export default {
 
       return row[props[index]] || this.empty
     }
+  },
+
+  install (Vue, { name = 'vue-table-builder' } = {}) {
+    Vue.component(name, this)
   }
 }
 </script>
