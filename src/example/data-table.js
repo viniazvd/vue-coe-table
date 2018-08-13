@@ -6,10 +6,10 @@ export const rowStyle = { 'color': '#5E6784' }
 export const totalStyle = { 'color': '#5E6784', 'background-color': '#E7E9F0' }
 
 export const cols = [
-  { label: 'Nome', row: 'name', sortable: { all: true, one: true } },
+  { label: 'Nome', row: 'name' },
   { label: 'E-mail', row: 'email' },
-  { label: 'Idade', row: 'age', sortable: { one: true }, hasTotal: true },
-  { label: 'Malícia', row: 'malice', sortable: { all: true }, hasTotal: true }
+  { label: 'Idade', row: 'age', hasTotal: true },
+  { label: 'Malícia', row: 'malice', hasTotal: true }
 ]
 
 export const rows = [
@@ -18,4 +18,5 @@ export const rows = [
   { name: 'coe3', email: 'coe3.mane@gmail.com', age: 2 },
   { name: 'coe4', email: 'coe4.mane@gmail.com', age: 1, malice: 10 }
 ]
+
 export const total = { enable: true, label: 'Total', colPosition: 'email' }

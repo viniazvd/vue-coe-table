@@ -7,28 +7,22 @@
 
       <slot name="col" :cols="cols">
         <th
-          v-for="({ label, row, sortable, iconToSortOne }, index) in _cols"
+          v-for="({ label, row }, index) in cols"
           :key="index"
           class="th-col"
           :style="thColStyle"
         >
-          <span
-            v-if="sortable && sortable.all"
-            class="icon-sortable-all"
-            @click="$handlerSortAll(row)"
-          >
-            {{ iconToSortAll }}
-          </span>
-
+          <!-- to do -->
+          <slot name="icon-sortable">
+            <span
+              v-if="sortable"
+              class="icon-sortable-all"
+              @click="$handlerSort(row, index)"
+            >
+              {{ iconToSort }}
+            </span>
+          </slot>
           <span>{{ label }}</span>
-
-          <span
-            v-if="sortable && sortable.one"
-            class="icon-sortable-one"
-            @click="$handlerSortOne(row, index)"
-          >
-            {{ iconToSortOne }}
-          </span>
         </th>
       </slot>
     </tr>
@@ -46,7 +40,7 @@
       <slot name="row" :rows="row" :cols="cols">
         <td
           class="td-row"
-          v-for="(_, _index) in _cols.length"
+          v-for="(_, _index) in cols.length"
           :key="_index"
           :style="tdRowStyle"
         >
@@ -108,29 +102,33 @@ export default {
       default: () => '-'
     },
     total: Object,
-    selectable: Boolean
+    selectable: Boolean,
+    sortable: Boolean
   },
 
   data () {
     return {
-      iconToSortAll: '▼'
+      iconToSort: '▼'
     }
+  },
+
+  created () {
+    this.cols.forEach(col => {
+      if (typeof col !== 'object') {
+        console.error('the array of columns must contain only objects')
+      }
+    })
+
+    this.rows.forEach(row => {
+      if (typeof row !== 'object') {
+        console.error('the array of rows must contain only objects')
+      }
+    })
   },
 
   computed: {
     hasValid () {
       return this.errorHandler()
-    },
-
-    _cols () {
-      const rowsWithIcons = this.cols.map(col => {
-        if (typeof col !== 'object') console.error('the array of columns must contain only objects')
-
-        // append 'iconToSortOne' to each object
-        return Object.assign(col, { iconToSortOne: '▼' })
-      })
-
-      return rowsWithIcons
     },
 
     _rows () {

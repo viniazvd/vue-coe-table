@@ -11,6 +11,7 @@
       :rows="rows"
       :total="total"
       selectable
+      sortable
       :checkeds.sync="checkeds"
     />
     <pre>
