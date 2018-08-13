@@ -1,4 +1,4 @@
-import isNumber from '../helpers/isNumber'
+import { iconOrderOne, iconOrderAll } from '../helpers/iconOrder'
 
 const sortable = {
   methods: {
@@ -13,47 +13,19 @@ const sortable = {
 
       const ordered = this._rows
         .map(_row => _row[row])
-        .sort((a, b) => {
-          const operator = isNumber(a, b)
-          const iconToSort = this._cols[index].iconToSort
+        .sort(iconOrderOne(this._cols, index))
 
-          if (iconToSort === '▼' && operator === true) return a - b
-
-          if (iconToSort === '▲' && operator === true) return b - a
-
-          if (iconToSort === '▲' && operator === false) return a < b
-
-          if (iconToSort === '▼' && operator === false) return a > b
-        })
-
-      return this.rows.map((_row, index) => {
-        _row[row] = ordered[index]
-
-        return _row
-      })
+      return this.rows.forEach((_row, index) => (_row[row] = ordered[index]))
     },
 
     $handlerSortAll (row) {
       this.iconToSortAll === '▼' ? this.iconToSortAll = '▲' : this.iconToSortAll = '▼'
 
-      const newOrder = this._rows
-        .sort((a, b) => {
-          const operator = isNumber(a[row], b[row])
+      const ordered = this._rows.sort(iconOrderAll(this.iconToSortAll, row))
+      const sameIndex = (_, _index) => indexRow => _index === indexRow
+      const changeOrder = (_row, indexRow) => ordered.find(sameIndex(indexRow))
 
-          if (this.iconToSortAll === '▼' && operator === true) return a[row] - b[row]
-
-          if (this.iconToSortAll === '▲' && operator === true) return b[row] - a[row]
-
-          if (this.iconToSortAll === '▲' && operator === false) return a[row] < b[row]
-
-          if (this.iconToSortAll === '▼' && operator === false) return a[row] > b[row]
-        })
-
-      return this.rows.map((_row, index) => {
-        _row = newOrder.find((__row, _index) => _index === index)
-
-        return _row
-      })
+      return this.rows.forEach(changeOrder)
     }
   }
 }
