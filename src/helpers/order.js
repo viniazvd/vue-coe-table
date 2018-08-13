@@ -9,13 +9,13 @@ import isNumber from './isNumber'
 //   if (icon === '▼' && !typeOfNumber) return a[row] > b[row]
 // }
 
-const operation = (isA, a, b) => isA ? a : b
+const condition = (isA, a, b) => isA ? a : b
 
 const toggleOrder = (row, icon) => (a, b) => {
-  return operation(
+  return condition(
     isNumber(a[row], b[row]),
-    operation(icon === '▲', a[row] - b[row], b[row] - a[row]),
-    operation(icon === '▲', a[row] < b[row], a[row] > b[row])
+    condition(icon === '▲', a[row] - b[row], b[row] - a[row]),
+    condition(icon === '▲', a[row] < b[row], a[row] > b[row])
   )
 }
 
