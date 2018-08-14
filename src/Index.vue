@@ -1,7 +1,7 @@
 <template>
   <div class="c-table-builder">
-    <table v-if="hasValid" id="app" class="table" :style="tableStyle">
-      <tr class="tr-col" :style="trColStyle">
+    <table v-if="hasValid" id="app" class="table">
+      <tr class="tr-col">
         <th v-if="selectable">
           <input type="checkbox" @click="$handlerCheckedAll()" />
         </th>
@@ -11,7 +11,6 @@
             v-for="({ label, row }, index) in cols"
             :key="index"
             class="th-col"
-            :style="thColStyle"
           >
             <!-- to do -->
             <slot name="icon-sortable">
@@ -32,7 +31,6 @@
         class="tr-row"
         v-for="(row, index) in _rows"
         :key="index"
-        :style="trRowStyle"
       >
         <th v-if="selectable">
           <input type="checkbox" :value="row" v-model="checkeds" />
@@ -43,18 +41,16 @@
             class="td-row"
             v-for="(_, _index) in cols.length"
             :key="_index"
-            :style="tdRowStyle"
           >
-            <span :style="rowStyle">{{ getRow(row, _index) }}</span>
+            <span class="row">{{ getRow(row, _index) }}</span>
           </td>
         </slot>
       </tr>
 
       <slot name="total">
         <tr
-          v-if="!!(total && total.enable)"
+          v-if="total"
           class="tr-totalizator"
-          :style="totalStyle"
         >
           <th
             class="th-totalizator"
@@ -67,7 +63,22 @@
       </slot>
     </table>
 
-    <pagination :data-table="dataaa" />
+    <div class="pagination">
+      <div class="handlers">
+        <span class="first" @click="first">←</span>
+
+        <div v-for="(page, index) in beforeHalf" :key="index">
+          <button class="handler" @click="changePage(index + 1)">{{ index + 1 }}</button>
+        </div>
+
+        <p class="page">{{ page }}</p>
+
+        <div v-for="(page, index) in afterHalf" :key="index + '⚐'">
+          <button class="handler" @click="changePage(index + beforeHalf.length + 2)">{{ index + beforeHalf.length + 2 }}</button>
+        </div>
+        <span class="last" @click="last">→</span>
+      </div>
+    </div>
 
     <div v-if="!hasValid" class="empty-state">
       EMPTY STATE
@@ -76,27 +87,20 @@
 </template>
 
 <script>
-import Pagination from './components/Pagination'
-
+// mixins
 import sortable from './mixins/sortable'
 import selectable from './mixins/selectable'
+import paginable from './mixins/paginable'
+
+// helpers
 import removeGaps from './helpers/removeGaps'
 
 export default {
   name: 'vue-table-builder',
 
-  components: { Pagination },
-
-  mixins: [ sortable, selectable ],
+  mixins: [ sortable, selectable, paginable ],
 
   props: {
-    tableStyle: Object,
-    trColStyle: Object,
-    thColStyle: Object,
-    trRowStyle: Object,
-    tdRowStyle: Object,
-    rowStyle: Object,
-    totalStyle: Object,
     cols: {
       type: Array,
       required: true
@@ -111,46 +115,26 @@ export default {
     },
     total: Object,
     selectable: Boolean,
-    sortable: Boolean
+    sortable: Boolean,
+    paginable: Boolean,
+    paginate: {
+      type: Object,
+      default: () => { return {} }
+    },
+    currentPage: {
+      type: [Number, String],
+      validator: (page) => !!page,
+      default: 1
+    },
+    perPage: {
+      type: [Number, String],
+      default: 10
+    }
   },
 
   data () {
     return {
-      iconToSort: '▼',
-      dataaa: [
-        { num: 1 },
-        { num: 2 },
-        { num: 3 },
-        { num: 4 },
-        { num: 5 },
-        { num: 6 },
-        { num: 7 },
-        { num: 8 },
-        { num: 9 },
-        { num: 10 },
-        { num: 11 },
-        { num: 12 },
-        { num: 13 },
-        { num: 14 },
-        { num: 15 },
-        { num: 16 },
-        { num: 17 },
-        { num: 18 },
-        { num: 19 },
-        { num: 20 },
-        { num: 21 },
-        { num: 22 },
-        { num: 23 },
-        { num: 24 },
-        { num: 25 },
-        { num: 26 },
-        { num: 27 },
-        { num: 28 },
-        { num: 29 },
-        { num: 30 },
-        { num: 31 },
-        { num: 32 }
-      ]
+      iconToSort: '▼'
     }
   },
 
@@ -174,13 +158,13 @@ export default {
     },
 
     _rows () {
-      const rowsWithoutGaps = removeGaps(this.rows)
+      const rowsWithoutGaps = removeGaps(this.dataTable)
 
       return rowsWithoutGaps
     },
 
     totals () {
-      const makeSum = prop => this.rows.reduce((total, obj) => total + ((obj[prop]) || 0), 0)
+      const makeSum = prop => this.dataTable.reduce((total, obj) => total + ((obj[prop]) || 0), 0)
       const makeLabel = row => row === this.total.colPosition ? this.total.label : null
 
       const total = ({ row, hasTotal }) => hasTotal ? makeSum(row) : makeLabel(row)
@@ -194,12 +178,16 @@ export default {
       } else {
         return this.cols.map(total)
       }
+    },
+
+    dataTable () {
+      return this.paginable ? this.pagination.data : this.rows
     }
   },
 
   methods: {
     errorHandler () {
-      if (!(this.cols || this.$scopedSlots.col) && !(this.rows || this.$scopedSlots.row)) {
+      if (!(this.cols || this.$scopedSlots.col) && !(this.dataTable || this.$scopedSlots.row)) {
         console.error('you must set the array of columns and rows')
 
         return false
@@ -211,7 +199,7 @@ export default {
         return false
       }
 
-      if (!(this.rows || this.$scopedSlots.row)) {
+      if (!(this.dataTable || this.$scopedSlots.row)) {
         console.error('you must set the array of rows')
 
         return false
@@ -236,8 +224,14 @@ export default {
 <style lang="scss">
 .c-table-builder {
   & > .table {
+    width: 100%;
+
     & > .tr-col {
+      background-color: #E7E9F0;
+
       & > .th-col {
+        color: #5E6784;
+        min-width: 100px;
 
         & > .icon-sortable-all {
           cursor: pointer;
@@ -250,11 +244,40 @@ export default {
     }
 
     & > .tr-row {
-      & > .td-row {}
+      border: 1px solid #E7E9F0;
+
+      & > .td-row {
+        text-align: center;
+
+        & > .row { color: #5E6784; }
+      }
     }
 
     & > .tr-totalizator {
+      color: #5E6784;
+      background-color: #E7E9F0;
+
       & > .th-totalizator {}
+    }
+  }
+
+  & > .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    & > .handlers {
+      display: flex;
+      max-width: 500px;
+
+      & > .first { cursor: pointer; }
+
+      & > .handler {
+        height: 25px;
+        width: 25px;
+      }
+
+      & > .last { cursor: pointer; }
     }
   }
 
