@@ -1,18 +1,15 @@
 <template>
   <section>
     <table-builder
-      :trColStyle="trColStyle"
-      :thColStyle="thColStyle"
-      :trRowStyle="trRowStyle"
-      :tdRowStyle="tdRowStyle"
-      :rowStyle="rowStyle"
-      :totalStyle="totalStyle"
       :cols="cols"
       :rows="rows"
       :total="total"
+      :checkeds.sync="checkeds"
+      :current-page="1"
+      :per-page="3"
       selectable
       sortable
-      :checkeds.sync="checkeds"
+      paginable
     />
     <pre>
       checkeds: {{ checkeds }}
@@ -22,7 +19,7 @@
 
 <script>
 import TableBuilder from '../Index'
-import { 
+import {
   trColStyle,
   thColStyle,
   trRowStyle,
