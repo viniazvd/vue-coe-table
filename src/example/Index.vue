@@ -5,11 +5,12 @@
       :rows="rows"
       :total="total"
       :checkeds.sync="checkeds"
-      :current-page="1"
+      :current-page="5"
       :per-page="3"
       selectable
       sortable
       paginable
+      pagination-type="ellipsised"
     />
     <pre>
       checkeds: {{ checkeds }}
@@ -20,12 +21,6 @@
 <script>
 import TableBuilder from '../Index'
 import {
-  trColStyle,
-  thColStyle,
-  trRowStyle,
-  tdRowStyle,
-  rowStyle,
-  totalStyle,
   cols,
   rows,
   total
@@ -38,12 +33,6 @@ export default {
 
   data () {
     return {
-      trColStyle,
-      thColStyle,
-      trRowStyle,
-      tdRowStyle,
-      rowStyle,
-      totalStyle,
       cols,
       rows,
       total,

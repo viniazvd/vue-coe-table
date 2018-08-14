@@ -27,11 +27,15 @@ const paginable = {
     },
 
     beforeHalf () {
-      return this.rows.slice(0, this.page - 1)
+      return this.paginationType === 'full'
+        ? this.rows.slice(0, this.page - 1)
+        : { page: this.page - 1 }
     },
 
     afterHalf () {
-      return this.rows.slice(this.page, this.totalPaged)
+      return this.paginationType === 'full'
+        ? this.rows.slice(this.page, this.totalPaged)
+        : { page: this.page + 1 }
     }
   },
 

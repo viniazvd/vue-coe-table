@@ -68,13 +68,13 @@
         <span class="first" @click="first">←</span>
 
         <div v-for="(page, index) in beforeHalf" :key="index">
-          <button class="handler" @click="changePage(index + 1)">{{ index + 1 }}</button>
+          <button class="handler" @click="changePage(typeof page === 'number' ? page : index + 1)">{{ typeof page === 'number' ? page : index + 1 }}</button>
         </div>
 
         <p class="page">{{ page }}</p>
 
         <div v-for="(page, index) in afterHalf" :key="index + '⚐'">
-          <button class="handler" @click="changePage(index + beforeHalf.length + 2)">{{ index + beforeHalf.length + 2 }}</button>
+          <button class="handler" @click="changePage(typeof page === 'number' ? page : index + beforeHalf.length + 2)">{{ typeof page === 'number' ? page : index + beforeHalf.length + 2 }}</button>
         </div>
         <span class="last" @click="last">→</span>
       </div>
@@ -117,6 +117,11 @@ export default {
     selectable: Boolean,
     sortable: Boolean,
     paginable: Boolean,
+    paginationType: {
+      type: String,
+      validator: (type) => (['full', 'ellipsised'].includes(type)),
+      default: 'full'
+    },
     paginate: {
       type: Object,
       default: () => { return {} }
