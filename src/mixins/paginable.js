@@ -26,13 +26,22 @@ const paginable = {
       return Math.ceil(this.rows.length / this.perPage)
     },
 
+    hasStart () {
+      return this.beforeHalf && this.beforeHalf.page
+    },
+
     beforeHalf () {
+      if (this.page === 1) return []
+
       return this.paginationType === 'full'
         ? this.rows.slice(0, this.page - 1)
         : { page: this.page - 1 }
     },
 
     afterHalf () {
+      if (this.page === this.totalPaged) return []
+      if (this.page === 1 && this.paginationType === 'ellipsised') return this.rows.slice(this.page, 3)
+
       return this.paginationType === 'full'
         ? this.rows.slice(this.page, this.totalPaged)
         : { page: this.page + 1 }
@@ -40,23 +49,42 @@ const paginable = {
   },
 
   methods: {
-    first () {
+    toFirst () {
       this.page = 1
+    },
+
+    toSecond () {
+      this.page = 2
     },
 
     changePage (page) {
       this.page = page
     },
 
-    // previous (page) {
-    //   this.page = page
-    // },
+    getPrevious (page, index) {
+      return typeof page === 'number' ? page : index + 1
+    },
 
-    // next (page) {
-    //   this.page = page
-    // },
+    getNext (page, index) {
+      if (this.page === 1) {
+        return index + 2
+      }
+      return typeof page === 'number' ? page : index + this.beforeHalf.length + 2
+    },
 
-    last () {
+    toPrevious () {
+      this.page -= 2
+    },
+
+    toLastMinusTwo () {
+      this.page = this.totalPaged - 2
+    },
+
+    toNext () {
+      this.page += 2
+    },
+
+    toLast () {
       this.page = this.totalPaged
     }
   }

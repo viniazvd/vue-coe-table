@@ -1,5 +1,5 @@
 <template>
-  <div class="c-table-builder">
+  <div v-if="hasValid" class="c-table-builder">
     <table v-if="hasValid" id="app" class="table">
       <tr class="tr-col">
         <th v-if="selectable">
@@ -65,24 +65,74 @@
 
     <div class="pagination">
       <div class="handlers">
-        <span class="first" @click="first">←</span>
+        <span class="first" @click="toFirst">«</span>
 
-        <div v-for="(page, index) in beforeHalf" :key="index">
-          <button class="handler" @click="changePage(typeof page === 'number' ? page : index + 1)">{{ typeof page === 'number' ? page : index + 1 }}</button>
+        <div v-if="hasStart" class="start-ellipsis">
+          <button class="start" @click="toFirst">
+            1
+          </button>
+
+          <button v-if="page === 3" class="second" @click="toSecond">
+            2
+          </button>
+
+          <div v-else-if="page !== 2" class="previous" @click="toPrevious">
+            ‹
+          </div>
+
+          <button v-if="this.page === this.totalPaged" class="start" @click="toLastMinusTwo">
+            {{ totalPaged - 2 }}
+          </button>
         </div>
 
-        <p class="page">{{ page }}</p>
+        <button
+          v-if="page !== 1 && page !== 2"
+          v-for="(page, index) in beforeHalf"
+          :key="index + '…'"
+          class="handler"
+          @click="changePage(getPrevious(page, index))"
+        >
+          {{ getPrevious(page, index) }}
+        </button>
 
-        <div v-for="(page, index) in afterHalf" :key="index + '⚐'">
-          <button class="handler" @click="changePage(typeof page === 'number' ? page : index + beforeHalf.length + 2)">{{ typeof page === 'number' ? page : index + beforeHalf.length + 2 }}</button>
+        <p class="current-page">{{ page }}</p>
+
+        <button
+          v-for="(page, index) in afterHalf"
+          :key="index + '⚐'"
+          class="handler"
+          @click="changePage(getNext(page, index))"
+        >
+          {{ getNext(page, index) }}
+        </button>
+
+        <div
+          v-if="page !== this.totalPaged && paginationType === 'ellipsised'"
+          class="end-ellipsis"
+        >
+          <div
+            v-if="page !== this.totalPaged - 2 && page !== this.totalPaged - 1"
+            class="next"
+            @click="toNext"
+          >
+            ›
+          </div>
+
+          <button
+            v-if="page !== this.totalPaged - 1 && page + afterHalf.length !== totalPaged" 
+            class="end"
+            @click="toLast"
+          >
+            {{ totalPaged }}
+          </button>
         </div>
-        <span class="last" @click="last">→</span>
+        <span class="last" @click="toLast">»</span>
       </div>
     </div>
+  </div>
 
-    <div v-if="!hasValid" class="empty-state">
-      EMPTY STATE
-    </div>
+  <div v-else class="empty-state">
+    EMPTY STATE
   </div>
 </template>
 
@@ -119,7 +169,7 @@ export default {
     paginable: Boolean,
     paginationType: {
       type: String,
-      validator: (type) => (['full', 'ellipsised'].includes(type)),
+      validator: type => (['full', 'ellipsised'].includes(type)),
       default: 'full'
     },
     paginate: {
@@ -133,6 +183,7 @@ export default {
     },
     perPage: {
       type: [Number, String],
+      validator: limit => limit > 2,
       default: 10
     }
   },
@@ -273,16 +324,86 @@ export default {
 
     & > .handlers {
       display: flex;
+      align-items: center;
       max-width: 500px;
 
-      & > .first { cursor: pointer; }
+      & > .first {
+        padding-right: 10px;
+        cursor: pointer;
+      }
+
+      & > .start-ellipsis {
+        display: flex;
+        align-items: flex-end;
+
+        & > .start {
+          height: 25px;
+          width: 25px;
+          margin: 0 5px;
+        }
+
+        & > .second {
+          height: 25px;
+          width: 25px;
+          margin: 0 5px;
+        }
+
+        & > .previous {
+          height: 25px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
 
       & > .handler {
         height: 25px;
         width: 25px;
+        margin: 0 5px;
       }
 
-      & > .last { cursor: pointer; }
+      & > .current-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        border: 1px solid red;
+        width: 25px;
+        height: 25px;
+        border-radius: 15px;
+
+        &:hover {
+          background-color: red;
+          color: white;
+        }
+      }
+
+      & > .end-ellipsis {
+        display: flex;
+        align-items: flex-end;
+
+        & > .next {
+          height: 25px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        & > .end {
+          height: 25px;
+          width: 25px;
+          margin: 0 5px;
+          display: flex;
+          justify-content: center;
+        }
+      }
+
+      & > .last {
+        padding-left: 10px;
+        cursor: pointer;
+      }
     }
   }
 
