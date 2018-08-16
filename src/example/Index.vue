@@ -12,9 +12,6 @@
       paginable
       pagination-type="ellipsised"
     />
-    <pre>
-      checkeds: {{ checkeds }}
-    </pre>
   </section>
 </template>
 
