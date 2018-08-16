@@ -187,8 +187,12 @@ export default {
     },
 
     totals () {
-      const makeSum = prop => this.dataTable.reduce((total, obj) => total + ((obj[prop]) || 0), 0)
-      const makeLabel = row => row === this.total.colPosition ? this.total.label : null
+      const sum = prop => (total, obj) =>
+        (typeof obj[prop] === 'number' && total + ((obj[prop]) || 0)) || '-'
+        
+      const makeSum = prop => this.dataTable.reduce(sum(prop), 0)
+        
+      const makeLabel = row => (row === this.total.colPosition && this.total.label) || null
 
       const total = ({ row, hasTotal }) => hasTotal ? makeSum(row) : makeLabel(row)
 
