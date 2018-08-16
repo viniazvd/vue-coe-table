@@ -6,19 +6,23 @@ const selectable = {
     }
   },
 
-  watch: {
-    checkeds (val) {
-      this.$emit('update:checkeds', val)
-    }
-  },
-
   methods: {
-    $handlerCheckedAll () {
-      this.allChecked = !this.allChecked
+    $selected (row) {
+      this.$emit('selected', row)
+    },
 
-      this.allChecked
-        ? this.checkeds = this._rows
-        : this.checkeds = []
+    $selectedAll () {
+      if (!this.allChecked) {
+        this.allChecked = true
+        this.checkeds = this.rows
+        
+        this.$emit('selected-all', { page: this._rows, table: this.rows })
+      } else {
+        this.allChecked = false
+        this.checkeds = []
+
+        this.$emit('reset-all')
+      }
     }
   }
 }

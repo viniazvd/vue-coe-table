@@ -3,7 +3,7 @@
     <table v-if="hasValid" class="table">
       <tr class="tr-col">
         <th v-if="selectable">
-          <input type="checkbox" @click="$handlerCheckedAll()" />
+          <input type="checkbox" @click="$selectedAll" />
         </th>
 
         <slot name="col" :cols="cols">
@@ -33,7 +33,7 @@
         :key="index"
       >
         <th v-if="selectable">
-          <input type="checkbox" :value="row" v-model="checkeds" />
+          <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
         </th>
 
         <slot name="row" :rows="row" :cols="cols">
