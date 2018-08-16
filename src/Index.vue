@@ -63,31 +63,24 @@
       </slot>
     </table>
 
-    <slot name="pagination" :pagination="handlers">
-      <div class="pagination">
-        <div class="handlers">
-          <span class="first" @click="toFirst">«</span>
+    <pagination 
+      :handlers="handlers"
+      :page="page"
+      @to-first="toFirst"
+      @change-page="changePage"
+      @to-last="toLast"
+    />
+  </div>
 
-            <button
-              v-for="(handler, index) in handlers"
-              :key="index + '…'"
-              :class="['handler', { '-page': index + 1 === page }]"
-              @click="changePage(handler)"
-            >
-              {{ handler.handler || handler.page }}
-            </button>
-
-          <span class="last" @click="toLast">»</span>
-          </div>
-        </div>
-      </slot>
-    </div>
   <div v-else class="empty-state">
     EMPTY STATE
   </div>
 </template>
 
 <script>
+// components
+import Pagination from './components/Pagination'
+
 // mixins
 import sortable from './mixins/sortable'
 import selectable from './mixins/selectable'
@@ -98,6 +91,8 @@ import removeGaps from './helpers/removeGaps'
 
 export default {
   name: 'vue-table-builder',
+
+  components: { Pagination },
 
   mixins: [ sortable, selectable, paginable ],
 
@@ -265,51 +260,6 @@ export default {
       background-color: #E7E9F0;
 
       & > .th-totalizator {}
-    }
-  }
-
-  & > .pagination {
-    display: flex;
-    margin-top: 20px;
-    justify-content: center;
-
-    & > .handlers {
-      display: flex;
-      max-width: 500px;
-      align-items: center;
-
-      & > .first {
-        cursor: pointer;
-        padding-right: 10px;
-      }
-
-      & > .handler {
-        width: 25px;
-        height: 25px;
-        display: flex;
-        margin: 0 5px;
-        border-radius: 15px;
-        justify-content: center;
-
-        &:hover {
-          color: white;
-          background-color: black;
-        }
-      }
-
-      & .-page {
-        background-color: red;
-
-        &:hover {
-          color: white;
-          background-color: red;
-        }
-      }
-
-      & > .last {
-        cursor: pointer;
-        padding-left: 10px;
-      }
     }
   }
 
