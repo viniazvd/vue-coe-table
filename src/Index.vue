@@ -123,7 +123,7 @@ export default {
     },
     paginate: {
       type: Object,
-      default: () => { return {} }
+      default: () => ({})
     },
     currentPage: {
       type: [Number, String],
