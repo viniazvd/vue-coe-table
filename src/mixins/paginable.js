@@ -26,62 +26,36 @@ const paginable = {
       return Math.ceil(this.rows.length / this.perPage)
     },
 
-    hasStart () {
-      return this.beforeHalf && this.beforeHalf.page
-    },
+    handlers () {
+      const pages = this.rows.slice(0, this.totalPaged)
 
-    beforeHalf () {
-      if (this.page === 1) return []
-
-      return this.paginationType === 'full'
-        ? this.rows.slice(0, this.page - 1)
-        : { page: this.page - 1 }
-    },
-
-    afterHalf () {
-      if (this.page === this.totalPaged) return []
-      if (this.page === 1 && this.paginationType === 'ellipsised') return this.rows.slice(this.page, 3)
-
-      return this.paginationType === 'full'
-        ? this.rows.slice(this.page, this.totalPaged)
-        : { page: this.page + 1 }
+      return Array.from({ length: pages.length }, (xs, i) => {
+        return {
+          page: i + 1,
+          handler: this.paginationType === 'ellipsised' && this.calcHandler(i)
+        }
+      })
     }
   },
 
   methods: {
+    calcHandler (i) {
+      return (i + 1 === 2 && i + 3 <= this.page && '‹') ||
+      (i + 1 === this.totalPaged - 1 && this.page <= this.totalPaged - 3 && '›')
+    },
+
     toFirst () {
       this.page = 1
     },
 
-    toSecond () {
-      this.page = 2
-    },
-
-    changePage (page) {
-      this.page = page
-    },
-
-    getPrevious (page, index) {
-      return typeof page === 'number' ? page : index + 1
-    },
-
-    getNext (page, index) {
-      if (this.page === 1) {
-        return index + 2
+    changePage ({page, handler}) {
+      if (handler === '‹') {
+        this.page -= 2
+      } else if (handler === '›') {
+        this.page += 2
+      } else {
+        this.page = page
       }
-      return typeof page === 'number' ? page : index + this.beforeHalf.length + 2
-    },
-
-    toPrevious () {
-      this.page -= 2
-    },
-
-    toLastMinusTwo () {
-      this.page = this.totalPaged - 2
-    },
-
-    toNext () {
-      this.page += 2
     },
 
     toLast () {

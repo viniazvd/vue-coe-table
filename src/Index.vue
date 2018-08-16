@@ -67,70 +67,19 @@
       <div class="handlers">
         <span class="first" @click="toFirst">«</span>
 
-        <div v-if="hasStart" class="start-ellipsis">
-          <button class="start" @click="toFirst">
-            1
-          </button>
-
-          <button v-if="page === 3" class="second" @click="toSecond">
-            2
-          </button>
-
-          <div v-else-if="page !== 2" class="previous" @click="toPrevious">
-            ‹
-          </div>
-
-          <button v-if="this.page === this.totalPaged" class="start" @click="toLastMinusTwo">
-            {{ totalPaged - 2 }}
-          </button>
-        </div>
-
-        <button
-          v-if="page !== 1 && page !== 2"
-          v-for="(page, index) in beforeHalf"
-          :key="index + '…'"
-          class="handler"
-          @click="changePage(getPrevious(page, index))"
-        >
-          {{ getPrevious(page, index) }}
-        </button>
-
-        <p class="current-page">{{ page }}</p>
-
-        <button
-          v-for="(page, index) in afterHalf"
-          :key="index + '⚐'"
-          class="handler"
-          @click="changePage(getNext(page, index))"
-        >
-          {{ getNext(page, index) }}
-        </button>
-
-        <div
-          v-if="page !== this.totalPaged && paginationType === 'ellipsised'"
-          class="end-ellipsis"
-        >
-          <div
-            v-if="page !== this.totalPaged - 2 && page !== this.totalPaged - 1"
-            class="next"
-            @click="toNext"
-          >
-            ›
-          </div>
-
           <button
-            v-if="page !== this.totalPaged - 1 && page + afterHalf.length !== totalPaged" 
-            class="end"
-            @click="toLast"
+            v-for="(handler, index) in handlers"
+            :key="index + '…'"
+            :class="['handler', { '-page': index + 1 === page }]"
+            @click="changePage(handler)"
           >
-            {{ totalPaged }}
+            {{ handler.handler || handler.page }}
           </button>
-        </div>
+
         <span class="last" @click="toLast">»</span>
+        </div>
       </div>
     </div>
-  </div>
-
   <div v-else class="empty-state">
     EMPTY STATE
   </div>
@@ -210,7 +159,25 @@ export default {
 
   computed: {
     hasValid () {
-      return this.errorHandler()
+      if (!(this.cols || this.$scopedSlots.col) && !(this.dataTable || this.$scopedSlots.row)) {
+        console.error('you must set the array of columns and rows')
+
+        return false
+      }
+
+      if (!(this.cols || this.$scopedSlots.col)) {
+        console.error('you must set the array of columns')
+
+        return false
+      }
+
+      if (!(this.dataTable || this.$scopedSlots.row)) {
+        console.error('you must set the array of rows')
+
+        return false
+      }
+
+      return true
     },
 
     _rows () {
@@ -242,28 +209,6 @@ export default {
   },
 
   methods: {
-    errorHandler () {
-      if (!(this.cols || this.$scopedSlots.col) && !(this.dataTable || this.$scopedSlots.row)) {
-        console.error('you must set the array of columns and rows')
-
-        return false
-      }
-
-      if (!(this.cols || this.$scopedSlots.col)) {
-        console.error('you must set the array of columns')
-
-        return false
-      }
-
-      if (!(this.dataTable || this.$scopedSlots.row)) {
-        console.error('you must set the array of rows')
-
-        return false
-      }
-
-      return true
-    },
-
     getRow (row, index) {
       const props = this.cols.map(({ row }) => row)
 
@@ -319,90 +264,45 @@ export default {
 
   & > .pagination {
     display: flex;
-    justify-content: center;
     margin-top: 20px;
+    justify-content: center;
 
     & > .handlers {
       display: flex;
-      align-items: center;
       max-width: 500px;
+      align-items: center;
 
       & > .first {
-        padding-right: 10px;
         cursor: pointer;
-      }
-
-      & > .start-ellipsis {
-        display: flex;
-        align-items: flex-end;
-
-        & > .start {
-          height: 25px;
-          width: 25px;
-          margin: 0 5px;
-        }
-
-        & > .second {
-          height: 25px;
-          width: 25px;
-          margin: 0 5px;
-        }
-
-        & > .previous {
-          height: 25px;
-          cursor: pointer;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+        padding-right: 10px;
       }
 
       & > .handler {
-        height: 25px;
         width: 25px;
-        margin: 0 5px;
-      }
-
-      & > .current-page {
+        height: 25px;
         display: flex;
-        justify-content: center;
-        align-items: center;
         margin: 0 5px;
-        border: 1px solid red;
-        width: 25px;
-        height: 25px;
         border-radius: 15px;
+        justify-content: center;
 
         &:hover {
-          background-color: red;
           color: white;
+          background-color: black;
         }
       }
 
-      & > .end-ellipsis {
-        display: flex;
-        align-items: flex-end;
+      & .-page {
+        background-color: red;
 
-        & > .next {
-          height: 25px;
-          cursor: pointer;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        & > .end {
-          height: 25px;
-          width: 25px;
-          margin: 0 5px;
-          display: flex;
-          justify-content: center;
+        &:hover {
+          color: white;
+          background-color: red;
         }
       }
 
       & > .last {
-        padding-left: 10px;
         cursor: pointer;
+        padding-left: 10px;
       }
     }
   }
