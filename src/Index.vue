@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasValid" class="c-table-builder" id="app">
-    <table v-if="hasValid" class="table">
+    <table class="table">
       <tr class="tr-col">
         <th v-if="selectable">
           <input type="checkbox" @click="$selectedAll" />
