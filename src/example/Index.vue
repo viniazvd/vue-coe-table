@@ -6,7 +6,7 @@
       :total="total"
       :checkeds.sync="checkeds"
       :current-page="5"
-      :per-page="3"
+      :per-page="5"
       selectable
       sortable
       paginable

@@ -27,7 +27,25 @@ export const rows = [
   { name: 'coe19', email: 'coe19.mane@gmail.com', age: 1, malice: 10 },
   { name: 'coe20', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
   { name: 'coe21', email: 'coe21.mane@gmail.com', age: 1, malice: 10 },
-  { name: 'coe22', email: 'coe22.mane@gmail.com', age: 1, malice: 10 }
+  { name: 'coe22', email: 'coe22.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe22', email: 'coe22.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe23', email: 'coe23.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe24', email: 'coe24.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe25', email: 'coe25.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe26', email: 'coe26.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe27', email: 'coe27.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe28', email: 'coe28.mane@gmail.com', age: 2, malice: 20 },
+  { name: 'coe29', email: 'coe29.mane@gmail.com', age: 2, malice: 10 },
+  { name: 'coe30', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe31', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe32', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe33', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe34', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe34', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe35', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe36', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe37', email: 'coe20.mane@gmail.com', age: 1, malice: 10 },
+  { name: 'coe38', email: 'coe20.mane@gmail.com', age: 1, malice: 10 }
 ]
 
 export const total = { label: 'Total', colPosition: 'email' }
