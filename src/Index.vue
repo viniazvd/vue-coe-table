@@ -1,6 +1,6 @@
 <template>
-  <div v-if="hasValid" class="c-table-builder">
-    <table v-if="hasValid" id="app" class="table">
+  <div v-if="hasValid" class="c-table-builder" id="app">
+    <table v-if="hasValid" class="table">
       <tr class="tr-col">
         <th v-if="selectable">
           <input type="checkbox" @click="$handlerCheckedAll()" />
@@ -63,22 +63,24 @@
       </slot>
     </table>
 
-    <div class="pagination">
-      <div class="handlers">
-        <span class="first" @click="toFirst">«</span>
+    <slot name="pagination" :pagination="handlers">
+      <div class="pagination">
+        <div class="handlers">
+          <span class="first" @click="toFirst">«</span>
 
-          <button
-            v-for="(handler, index) in handlers"
-            :key="index + '…'"
-            :class="['handler', { '-page': index + 1 === page }]"
-            @click="changePage(handler)"
-          >
-            {{ handler.handler || handler.page }}
-          </button>
+            <button
+              v-for="(handler, index) in handlers"
+              :key="index + '…'"
+              :class="['handler', { '-page': index + 1 === page }]"
+              @click="changePage(handler)"
+            >
+              {{ handler.handler || handler.page }}
+            </button>
 
-        <span class="last" @click="toLast">»</span>
+          <span class="last" @click="toLast">»</span>
+          </div>
         </div>
-      </div>
+      </slot>
     </div>
   <div v-else class="empty-state">
     EMPTY STATE
