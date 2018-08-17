@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!hasValid" class="c-table-builder" id="app">
+  <div v-if="hasValid" class="c-table-builder" id="app">
     <table class="table">
       <tr class="tr-col">
         <th v-if="selectable">
@@ -134,6 +134,10 @@ export default {
       type: [Number, String],
       validator: limit => limit > 2,
       default: 10
+    },
+    pagesLimit: {
+      type: [Number, String],
+      validator: limit => limit > 3
     }
   },
 
