@@ -36,8 +36,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/reference';
-
 .c-input-container {
   position: relative;
 
@@ -48,10 +46,8 @@ export default {
     margin-bottom: 5px;
     padding-right: 10px;
     text-transform: uppercase;
-    font-family: $title-font-family;
-    color: map-get($text-color, base-30);
-
-    & > .required { color: $negative-color; margin-top: 5px; }
+    opacity: 0.8;
+    & > .required { color: red; margin-top: 5px; }
   }
 
   &.-label { margin-top: 22px; }
@@ -60,7 +56,7 @@ export default {
   & > .validation {
     position: absolute;
     bottom: -20px;
-    color: $negative-color;
+    color: red;
   }
 }
 </style>
