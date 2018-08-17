@@ -1,16 +1,16 @@
 <template>
   <div class="pagination">
-    <slot name="pagination" :pagination="handlers">
-      <div class="handlers">
+    <slot name="pagination" :pages="pages">
+      <div class="pages">
         <span class="first" @click="$emit('to-first')">«</span>
 
         <button
-          v-for="(handler, index) in handlers"
+          v-for="(_, index) in pages"
           :key="index + '…'"
-          :class="['handler', { '-page': index + 1 === page }]"
-          @click="$emit('change-page', handler)"
+          :class="['page', { '-page': index + 1 === page }]"
+          @click="$emit('change-page', _)"
         >
-          {{ handler.handler || handler.page }}
+          {{ _.handler || _.page }}
         </button>
 
         <span class="last" @click="$emit('to-last')">»</span>
@@ -24,7 +24,7 @@ export default {
   name: 'pagination',
 
   props: {
-    handlers: {
+    pages: {
       type: Array,
       required: true
     },
@@ -42,7 +42,7 @@ export default {
   margin-top: 20px;
   justify-content: center;
 
-  & > .handlers {
+  & > .pages {
     display: flex;
     max-width: 500px;
     align-items: center;
@@ -52,7 +52,7 @@ export default {
       padding-right: 10px;
     }
 
-    & > .handler {
+    & > .page {
       width: 25px;
       height: 25px;
       display: flex;

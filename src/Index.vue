@@ -64,7 +64,7 @@
     </table>
 
     <pagination 
-      :handlers="handlers"
+      :pages="pages"
       :page="page"
       @to-first="toFirst"
       @change-page="changePage"

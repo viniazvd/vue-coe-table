@@ -26,20 +26,20 @@ const paginable = {
       return Math.ceil(this.rows.length / this.perPage)
     },
 
-    handlers () {
+    pages () {
       const pages = this.rows.slice(0, this.totalPaged)
 
       return Array.from({ length: pages.length }, (xs, i) => {
         return {
           page: i + 1,
-          handler: this.paginationType === 'ellipsised' && this.calcHandler(i)
+          handler: this.paginationType === 'ellipsised' && this.calcPages(i)
         }
       })
     }
   },
 
   methods: {
-    calcHandler (i) {
+    calcPages (i) {
       return (i + 1 === 2 && i + 3 <= this.page && '‹') ||
       (i + 1 === this.totalPaged - 1 && this.page <= this.totalPaged - 3 && '›')
     },
