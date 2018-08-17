@@ -1,81 +1,94 @@
 <template>
   <div v-if="hasValid" class="c-table-builder" id="app">
-    <table class="table">
-      <tr class="tr-col">
-        <th v-if="selectable">
-          <input type="checkbox" @click="$selectedAll" />
-        </th>
+    <slot name="filters">
+      <filters 
+        label="Filtrar por: "
+        :search="search"
+        @search="synchronizeSearch"
+      />
+    </slot>  
 
-        <slot name="col" :cols="cols">
-          <th
-            v-for="({ label, row }, index) in cols"
-            :key="index"
-            class="th-col"
-          >
-            <!-- to do -->
-            <slot name="icon-sortable">
-              <span
-                v-if="sortable"
-                class="icon-sortable-all"
-                @click="$handlerSort(row, index)"
-              >
-                {{ iconToSort }}
-              </span>
-            </slot>
-            <span>{{ label }}</span>
+    <div v-if="!isEmpty" class="table-container">
+      <table class="table">
+        <tr class="tr-col">
+          <th v-if="selectable">
+            <input type="checkbox" @click="$selectedAll" />
           </th>
-        </slot>
-      </tr>
 
-      <tr
-        class="tr-row"
-        v-for="(row, index) in _rows"
-        :key="index"
-      >
-        <th v-if="selectable">
-          <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
-        </th>
-
-        <slot name="row" :rows="row" :cols="cols">
-          <td
-            class="td-row"
-            v-for="(_, _index) in cols.length"
-            :key="_index"
-          >
-            <span class="row">{{ getRow(row, _index) }}</span>
-          </td>
-        </slot>
-      </tr>
-
-      <slot name="total">
-        <tr
-          v-if="total"
-          class="tr-totalizator"
-        >
-          <th
-            class="th-totalizator"
-            v-for="(_total, index) in totals"
-            :key="index"
-          >
-            <span >{{ _total }}</span>
-          </th>
+          <slot name="col" :cols="cols">
+            <th
+              v-for="({ label, row }, index) in cols"
+              :key="index"
+              class="th-col"
+            >
+              <!-- to do -->
+              <slot name="icon-sortable">
+                <span
+                  v-if="sortable"
+                  class="icon-sortable-all"
+                  @click="$handlerSort(row, index)"
+                >
+                  {{ iconToSort }}
+                </span>
+              </slot>
+              <span>{{ label }}</span>
+            </th>
+          </slot>
         </tr>
-      </slot>
-    </table>
 
-    <pagination 
-      v-if="paginable"
-      :pages="pages"
-      :page="page"
-      @to-first="toFirst"
-      @change-page="changePage"
-      @to-last="toLast"
-    />
+        <tr
+          class="tr-row"
+          v-for="(row, index) in _rows"
+          :key="index"
+        >
+          <th v-if="selectable">
+            <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
+          </th>
+
+          <slot name="row" :rows="row" :cols="cols">
+            <td
+              class="td-row"
+              v-for="(_, _index) in cols.length"
+              :key="_index"
+            >
+              <span class="row">{{ getRow(row, _index) }}</span>
+            </td>
+          </slot>
+        </tr>
+
+        <slot name="total">
+          <tr
+            v-if="total"
+            class="tr-totalizator"
+          >
+            <th
+              class="th-totalizator"
+              v-for="(_total, index) in totals"
+              :key="index"
+            >
+              <span >{{ _total }}</span>
+            </th>
+          </tr>
+        </slot>
+      </table>
+
+      <pagination 
+        v-if="paginable"
+        :pages="pages"
+        :page="page"
+        @to-first="toFirst"
+        @change-page="changePage"
+        @to-last="toLast"
+      />
+    </div>
+    <div v-else>
+      EMPTY STATE
+    </div>
   </div>
 
   <div v-else class="empty-state">
     <slot name="empty">
-      EMPTY STATE
+      error: invalid table!
     </slot>
   </div>
 </template>
@@ -83,6 +96,7 @@
 <script>
 // components
 import Pagination from './components/Pagination'
+import Filters from './components/Filters'
 
 // mixins
 import sortable from './mixins/sortable'
@@ -95,7 +109,7 @@ import removeGaps from './helpers/removeGaps'
 export default {
   name: 'vue-table-builder',
 
-  components: { Pagination },
+  components: { Pagination, Filters },
 
   mixins: [ sortable, selectable, paginable ],
 
@@ -113,6 +127,11 @@ export default {
       default: () => '-'
     },
     total: Object,
+    searchParams: {
+      // array of strings
+      // required if paginable
+      type: Array 
+    },
     selectable: Boolean,
     sortable: Boolean,
     paginable: Boolean,
@@ -143,6 +162,7 @@ export default {
 
   data () {
     return {
+      search: '',
       iconToSort: '▼'
     }
   },
@@ -184,6 +204,10 @@ export default {
       return true
     },
 
+    isEmpty () {
+      return !this.pages.length && this.search
+    },
+
     _rows () {
       const rowsWithoutGaps = removeGaps(this.dataTable)
 
@@ -221,6 +245,10 @@ export default {
       const props = this.cols.map(({ row }) => row)
 
       return row[props[index]] || this.empty
+    },
+
+    synchronizeSearch (value) {
+      this.search = value
     }
   },
 
@@ -231,7 +259,7 @@ export default {
 </script>
 
 <style lang="scss">
-.c-table-builder {
+.c-table-builder > .table-container {
   & > .table {
     width: 100%;
 
