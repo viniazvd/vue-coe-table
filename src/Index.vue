@@ -64,6 +64,7 @@
     </table>
 
     <pagination 
+      v-if="paginable"
       :pages="pages"
       :page="page"
       @to-first="toFirst"
