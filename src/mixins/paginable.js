@@ -40,9 +40,15 @@ const paginable = {
 
   methods: {
     calcPages (i) {
-      return (i + 1 === 2 && i + 3 <= this.page && '‹') ||
-      (i + 1 === (this.pagesLimit || this.totalPaged) - 1 && 
-      this.page <= (this.pagesLimit - 3 || this.totalPaged - 3) && '›')
+      const currentPageItem = i + 1
+      const hasHiddenNumberBefore = i + 3 <= this.page
+
+      if (currentPageItem === 2 && hasHiddenNumberBefore) return '‹'
+
+      const currentPageItemIsBeforeLast = currentPageItem === (this.pagesLimit || this.totalPaged) - 1
+      const hasHiddenNumberAfter = this.page <= (this.pagesLimit - 3 || this.totalPaged - 3) && '›'
+      
+      if (currentPageItemIsBeforeLast && hasHiddenNumberAfter) return '›'
     },
 
     toFirst () {
