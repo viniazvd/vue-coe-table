@@ -1,3 +1,5 @@
+import findBy from '../helpers/findBy'
+
 const paginable = {
   data () {
     return {
@@ -5,25 +7,38 @@ const paginable = {
     }
   },
 
+  watch: {
+    search (newValue, odlValue) {
+      // search in action = reset current page
+      if (newValue !== odlValue) this.page = 1
+      // empty search = set page again
+      if (!newValue) this.page = this.currentPage 
+    }
+  },
+
   computed: {
     pagination () {
-      let { from = 0, to = 0 } = this.paginate
+      const filtereds = findBy(this.rows, this.search, this.searchParams)
+      const dataTable = this.search && this.searchParams ? filtereds : this.rows
 
-      const data = this.rows.slice((this.page - 1) * this.perPage, this.perPage * this.page)
-      from = ((this.page - 1) * this.perPage) + 1
-      to = ((this.page - 1) * this.perPage) + data.length
+      const data = dataTable.slice((this.page - 1) * this.perPage, this.perPage * this.page)
+      const from = ((this.page - 1) * this.perPage) + 1
+      const to = ((this.page - 1) * this.perPage) + data.length
 
       return {
         data,
         ...this.page,
         from,
         ...this.perPage,
-        to
+        to,
+        total: dataTable.length
       }
     },
 
     totalPaged () {
-      return Math.ceil(this.rows.length / this.perPage)
+      const data = this.search ? this.pagination.total : this.rows.length
+
+      return Math.ceil(data / this.perPage)
     },
 
     pages () {
