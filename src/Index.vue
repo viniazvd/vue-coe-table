@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasValid" class="c-table-builder" id="app">
+  <div v-if="!hasValid" class="c-table-builder" id="app">
     <table class="table">
       <tr class="tr-col">
         <th v-if="selectable">
@@ -74,7 +74,9 @@
   </div>
 
   <div v-else class="empty-state">
-    EMPTY STATE
+    <slot name="empty">
+      EMPTY STATE
+    </slot>
   </div>
 </template>
 
