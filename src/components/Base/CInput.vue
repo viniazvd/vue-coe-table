@@ -4,7 +4,6 @@
       v-bind="$attrs"
       :disabled="disabled"
       :value="value"
-      :class="classes"
       @input="v => $emit('input', v.target.value)"
     >
   </c-input-container>
@@ -17,29 +16,13 @@ export default {
   components: { CInputContainer },
 
   props: {
-    round: Boolean,
-    opaque: Boolean,
     value: String,
     disabled: Boolean
-  },
-
-  computed: {
-    classes () {
-      return [
-        'input',
-        {
-          '-round': this.round,
-          '-opaque': this.opaque,
-          '-disabled': this.disabled
-        }
-      ]
-    }
   }
 }
 </script>
 
 <style lang="scss">
-@import '../../styles/reference';
 $icon-position: 12px;
 
 .c-input {
@@ -50,21 +33,14 @@ $icon-position: 12px;
   & > .input {
     outline: 0;
     font-size: 14px;
-    border: $border;
+    border: 1px solid black;
     border-radius: 5px;
-    color: map-get($text-color, base-80);
+    color: black;
     transition: box-shadow .3s ease;
 
-    &:hover { @include hover() }
-    &::placeholder { color: map-get($text-color, base-30); }
+    &:hover {}
+    &::placeholder { opacity: 0.3; }
 
-    &.-textarea { padding: { left: 15px; top: 15px; right: 15px; } }
-    &:not(.-textarea) {
-      height: 40px;
-      text-indent: 15px;
-    }
-    &.-round { border-radius: 20px; border: $border; }
-    &.-opaque { background-color: map-get($text-color, base-05) }
     &.-disabled { cursor: not-allowed; }
   }
 }
