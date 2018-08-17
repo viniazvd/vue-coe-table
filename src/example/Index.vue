@@ -4,6 +4,7 @@
       :cols="cols"
       :rows="rows"
       :total="total"
+      :search-params="['name']"
       :checkeds.sync="checkeds"
       :current-page="2"
       :per-page="5"
