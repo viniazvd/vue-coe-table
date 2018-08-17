@@ -64,6 +64,7 @@ export default {
         color: white;
         background-color: black;
       }
+      &:focus { outline: unset; }
     }
 
     & .-page {
