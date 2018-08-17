@@ -1,6 +1,12 @@
 import toggleOrder from '../helpers/order'
 
 const sortable = {
+  watch: {
+    page () {
+      this.iconToSort = '▼'
+    }
+  },
+
   methods: {
     $handlerSort (row) {
       this.iconToSort === '▼' ? this.iconToSort = '▲' : this.iconToSort = '▼'
