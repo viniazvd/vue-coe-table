@@ -27,7 +27,7 @@ const paginable = {
     },
 
     pages () {
-      const pages = this.rows.slice(0, this.totalPaged)
+      const pages = this.rows.slice(0, this.pagesLimit || this.totalPaged)
 
       return Array.from({ length: pages.length }, (xs, i) => {
         return {
@@ -41,7 +41,8 @@ const paginable = {
   methods: {
     calcPages (i) {
       return (i + 1 === 2 && i + 3 <= this.page && '‹') ||
-      (i + 1 === this.totalPaged - 1 && this.page <= this.totalPaged - 3 && '›')
+      (i + 1 === (this.pagesLimit || this.totalPaged) - 1 && 
+      this.page <= (this.pagesLimit - 3 || this.totalPaged - 3) && '›')
     },
 
     toFirst () {
