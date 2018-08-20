@@ -4,10 +4,12 @@
       :cols="cols"
       :rows="rows"
       :total="total"
+      :search="search"
       :search-params="['name']"
       :checkeds.sync="checkeds"
       :current-page="2"
       :per-page="5"
+      @search="synchronizeSearch"
       selectable
       sortable
       paginable
@@ -34,7 +36,14 @@ export default {
       cols,
       rows,
       total,
+      search: '',
       checkeds: []
+    }
+  },
+
+  methods: {
+    synchronizeSearch (value) {
+      this.search = value
     }
   }
 }
