@@ -1,11 +1,7 @@
 <template>
   <div v-if="hasValid" class="c-table-builder" id="app">
     <slot name="filters">
-      <filters 
-        label="Filtrar por: "
-        :search="search"
-        @search="synchronizeSearch"
-      />
+      <filters label="Filtrar por: " :search="search" v-on="$listeners" />
     </slot>  
 
     <div v-if="!isEmpty" class="table-container">
@@ -127,10 +123,11 @@ export default {
       default: () => '-'
     },
     total: Object,
+    search: String,
     searchParams: {
       // array of strings
       // required if paginable
-      type: Array 
+      type: Array
     },
     selectable: Boolean,
     sortable: Boolean,
@@ -162,7 +159,6 @@ export default {
 
   data () {
     return {
-      search: '',
       iconToSort: '▼'
     }
   },
@@ -245,10 +241,6 @@ export default {
       const props = this.cols.map(({ row }) => row)
 
       return row[props[index]] || this.empty
-    },
-
-    synchronizeSearch (value) {
-      this.search = value
     }
   },
 
