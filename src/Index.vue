@@ -227,7 +227,7 @@ export default {
     },
 
     totals () {
-      const sum = prop => (total, obj) => (typeof obj[prop] === 'number' && total + ((obj[prop]) || 0)) || '-'
+      const sum = prop => (total, obj) => (typeof obj[prop] === 'number' && total + (+(obj[prop]) || 0)) || '-'
 
       const makeSum = prop => this.dataTable.reduce(sum(prop), 0)
 
@@ -334,7 +334,7 @@ export default {
 
       &.-has-top-shadow::before {
         @include shadow;
-        top: 15px;
+        top: 20px;
       }
 
       &.-has-bottom-shadow::after {
