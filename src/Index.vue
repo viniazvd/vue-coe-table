@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasValid" class="c-table-builder" id="app">
-    <slot name="filters">
+    <slot name="actions">
       <filters label="Filtrar por: " :search="search" v-on="$listeners" />
     </slot>
 
