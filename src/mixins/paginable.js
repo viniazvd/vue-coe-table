@@ -9,10 +9,12 @@ const paginable = {
 
   watch: {
     search (newValue, odlValue) {
-      // search in action = reset current page
-      if (newValue !== odlValue) this.page = 1
-      // empty search = set page again
-      if (!newValue) this.page = this.currentPage 
+      if (this.paginable) {
+        // search in action = reset current page
+        if (newValue !== odlValue) this.page = 1
+        // empty search = set page again
+        if (!newValue) this.page = this.currentPage
+      }
     }
   },
 
@@ -62,7 +64,7 @@ const paginable = {
 
       const currentPageItemIsBeforeLast = currentPageItem === (this.pagesLimit || this.totalPaged) - 1
       const hasHiddenNumberAfter = this.page <= (this.pagesLimit - 3 || this.totalPaged - 3) && '›'
-      
+
       if (currentPageItemIsBeforeLast && hasHiddenNumberAfter) return '›'
     },
 
