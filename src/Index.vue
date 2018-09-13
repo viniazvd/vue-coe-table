@@ -20,7 +20,7 @@
               >
                 <!-- to do -->
                 <slot name="icon-sortable">
-                  <span v-if="sortable" class="icon-sortable-all" @click="$handlerSort(row, index)">
+                  <span v-if="sortable" class="icon-sortable-all" @click="$handlerSort(row)">
                     {{ iconToSort }}
                   </span>
                 </slot>
