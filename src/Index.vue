@@ -86,6 +86,7 @@ import warnings from './mixins/warnings'
 import sortable from './mixins/sortable'
 import selectable from './mixins/selectable'
 import paginable from './mixins/paginable'
+import scroll from './mixins/scroll'
 
 // helpers
 import removeGaps from './helpers/removeGaps'
@@ -95,7 +96,7 @@ export default {
 
   components: { Pagination, Filters },
 
-  mixins: [ warnings, sortable, selectable, paginable ],
+  mixins: [ warnings, sortable, selectable, paginable, scroll ],
 
   props: {
     cols: {
@@ -105,9 +106,6 @@ export default {
     rows: {
       type: Array,
       required: true
-    },
-    maxHeight: {
-      type: String
     },
     empty: {
       type: String,
@@ -150,25 +148,7 @@ export default {
 
   data () {
     return {
-      iconToSort: '▼',
-      hasBottomShadow: true,
-      hasTopShadow: true
-    }
-  },
-
-  mounted () {
-    const tbody = this.$el.querySelector('.tbody')
-
-    if (this.maxHeight) {
-      tbody.addEventListener('scroll', this.getBottomPosition)
-      tbody.addEventListener('scroll', this.getTopPosition)
-    }
-  },
-
-  watch: {
-    '$refs.tbody': {
-      handler: 'getBottomPosition',
-      immediate: true
+      iconToSort: '▼'
     }
   },
 
@@ -221,34 +201,6 @@ export default {
       const props = this.cols.map(({ row }) => row)
 
       return row[props[index]] || this.empty
-    },
-
-    getTopPosition () {
-      const tbodyTop = this.$refs.tbody.scrollTop
-
-      const initial = tbodyTop === 0
-
-      this.hasTopShadow = initial
-    },
-
-    getBottomPosition () {
-      this.$nextTick(() => {
-        const tbodyHeight = this.$refs.tbody.scrollHeight
-        const tbodyTop = this.$refs.tbody.scrollTop
-
-        const final = tbodyHeight === +this.maxHeight + tbodyTop
-
-        this.hasBottomShadow = final
-      })
-    }
-  },
-
-  beforeDestroy () {
-    const tbody = this.$el.querySelector('.tbody')
-
-    if (this.maxHeight) {
-      tbody.removeEventListener('scroll', this.getBottomPosition)
-      tbody.removeEventListener('scroll', this.getTopPosition)
     }
   },
 
