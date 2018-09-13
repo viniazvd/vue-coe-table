@@ -314,10 +314,10 @@ export default {
 
     & > .thead {
       @include table-config;
-      border: 1px solid #E7E9F0;
+      border: $border;
 
       & > .tr-col {
-        background-color: #E7E9F0;
+        background-color: $background-color;
 
         & > .th-col-selectable { width: 50px; }
         & > .th-col {
@@ -335,7 +335,7 @@ export default {
 
       & > .tr-row {
         @include table-config;
-        border: 1px solid #E7E9F0;
+        border: $border;
 
         & > .th-row-selectable { width: 50px; }
         & > .td-row {
