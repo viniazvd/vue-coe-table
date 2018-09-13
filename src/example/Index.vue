@@ -14,8 +14,21 @@
       selectable
       sortable
       pagination-type="ellipsised"
-    />
-      <!-- paginable -->
+    >
+    <tfoot slot="total" class="tfoot">
+      <tr class="tr-totalizator">
+        <th class="th-totalizator"><span>-</span></th>
+        <th class="th-totalizator"><span>-</span></th>
+        <th class="th-totalizator"><span>-</span></th>
+        <th class="th-totalizator"><span>{{ ageTotal }}</span></th>
+        <th class="th-totalizator"><span>{{ maliceTotal }}</span></th>
+        <th class="th-totalizator"><span>{{ sagacityTotal }}</span></th>
+        <th class="th-totalizator"><span></span></th>
+      </tr>
+    </tfoot>
+    </table-builder>
+    <!-- paginable
+    max-height="300" -->
   </section>
 </template>
 
@@ -42,9 +55,27 @@ export default {
     }
   },
 
+  computed: {
+    ageTotal () {
+      return this.getTotal(this.rows, 'age')
+    },
+
+    maliceTotal () {
+      return this.getTotal(this.rows, 'malice')
+    },
+
+    sagacityTotal () {
+      return this.getTotal(this.rows, 'sagacity')
+    }
+  },
+
   methods: {
     synchronizeSearch (value) {
       this.search = value
+    },
+
+    getTotal (data, prop) {
+      return data.reduce((total, item) => total + item[prop], 0)
     }
   }
 }
