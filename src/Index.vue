@@ -90,6 +90,7 @@ import scroll from './mixins/scroll'
 
 // helpers
 import removeGaps from './helpers/removeGaps'
+import findBy from './helpers/findBy'
 
 export default {
   name: 'vue-table-builder',
@@ -192,7 +193,10 @@ export default {
     },
 
     dataTable () {
-      return this.paginable ? this.pagination.data : this.rows
+      const filtereds = findBy(this.rows, this.search, this.searchParams)
+      const filteredRows = this.search && this.searchParams ? filtereds : this.rows
+
+      return this.paginable ? this.pagination.data : filteredRows
     }
   },
 
