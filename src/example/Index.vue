@@ -10,7 +10,7 @@
       :current-page="2"
       :per-page="5"
       @search="synchronizeSearch"
-      max-height="200px"
+      max-height="300"
       selectable
       sortable
       pagination-type="ellipsised"
