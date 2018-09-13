@@ -34,26 +34,18 @@
           </tr>
         </thead>
 
-        <tbody :class="tbodyClass" :style="{ maxHeight }">
-          <tr
-            class="tr-row"
-            v-for="(row, index) in _rows"
-            :key="index"
-          >
+        <tbody :class="tbodyClass" :style="{ maxHeight: maxHeight + 'px' }" ref="tbody">
+          <tr class="tr-row" v-for="(row, index) in _rows" :key="index">
             <th v-if="selectable" class="th-row-selectable">
               <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
             </th>
 
             <slot name="row" :rows="row" :cols="cols">
-              <td
-                class="td-row"
-                  v-for="(_, _index) in cols.length"
-                  :key="_index"
-                >
-                  <span class="row">{{ getRow(row, _index) }}</span>
-                </td>
-              </slot>
-            </tr>
+              <td class="td-row" v-for="(_, _index) in cols.length" :key="_index" ref="">
+                <span class="row">{{ getRow(row, _index) }}</span>
+              </td>
+            </slot>
+          </tr>
         </tbody>
 
         <slot name="total">
@@ -168,7 +160,9 @@ export default {
 
   data () {
     return {
-      iconToSort: '▼'
+      iconToSort: '▼',
+      hasBottomShadow: true,
+      hasTopShadow: true
     }
   },
 
@@ -184,6 +178,31 @@ export default {
         console.error('the array of rows must contain only objects')
       }
     })
+  },
+
+  mounted () {
+    const tbody = this.$el.querySelector('.tbody')
+
+    if (this.maxHeight) {
+      tbody.addEventListener('scroll', this.getBottomPosition)
+      tbody.addEventListener('scroll', this.getTopPosition)
+    }
+  },
+
+  beforeDestroy () {
+    const tbody = this.$el.querySelector('.tbody')
+
+    if (this.maxHeight) {
+      tbody.removeEventListener('scroll', this.getBottomPosition)
+      tbody.removeEventListener('scroll', this.getTopPosition)
+    }
+  },
+
+  watch: {
+    '$refs.tbody': {
+      handler: 'getBottomPosition',
+      immediate: true
+    }
   },
 
   computed: {
@@ -220,7 +239,11 @@ export default {
     },
 
     tbodyClass () {
-      return ['tbody', { '-max-heigth': this.maxHeight }]
+      return ['tbody', {
+        '-max-heigth': this.maxHeight,
+        '-has-top-shadow': !!this.maxHeight && !this.hasTopShadow,
+        '-has-bottom-shadow': !!this.maxHeight && !this.hasBottomShadow
+      }]
     },
 
     totals () {
@@ -254,22 +277,43 @@ export default {
       const props = this.cols.map(({ row }) => row)
 
       return row[props[index]] || this.empty
+    },
+
+    getTopPosition () {
+      const tbodyTop = this.$refs.tbody.scrollTop
+
+      const initial = tbodyTop === 0
+
+      this.hasTopShadow = initial
+    },
+
+    getBottomPosition () {
+      this.$nextTick(() => {
+        const tbodyHeight = this.$refs.tbody.scrollHeight
+        const tbodyTop = this.$refs.tbody.scrollTop
+
+        const final = tbodyHeight === +this.maxHeight + tbodyTop
+
+        this.hasBottomShadow = final
+      })
     }
   },
 
-  install (Vue, { name = 'vue-table-builder' } = {}) {
+  install (Vue, { name = 'vue-coe-table' } = {}) {
     Vue.component(name, this)
   }
 }
 </script>
 
 <style lang="scss">
+@import './style/index.scss';
+
 .c-table-builder > .table-container {
   & > .table {
+    position: relative;
+
     & > .thead {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
+      @include table-config;
       border: 1px solid #E7E9F0;
 
       & > .tr-col {
@@ -277,16 +321,11 @@ export default {
 
         & > .th-col-selectable { width: 50px; }
         & > .th-col {
-          color: #5E6784;
+          color: $text-color;
           min-width: 100px;
 
-          & > .icon-sortable-all {
-            cursor: pointer;
-          }
-
-          & > .icon-sortable-one {
-            cursor: pointer;
-          }
+          & > .icon-sortable-all { cursor: pointer; }
+          & > .icon-sortable-one { cursor: pointer; }
         }
       }
     }
@@ -295,16 +334,24 @@ export default {
       display: block;
 
       & > .tr-row {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
+        @include table-config;
         border: 1px solid #E7E9F0;
 
         & > .th-row-selectable { width: 50px; }
         & > .td-row {
           text-align: center;
-          & > .row { color: #5E6784; }
+          & > .row { color: $text-color; }
         }
+      }
+
+      &.-has-top-shadow::before {
+        @include shadow;
+        top: 15px;
+      }
+
+      &.-has-bottom-shadow::after {
+        @include shadow;
+        bottom: 25px;
       }
     }
 
@@ -314,16 +361,13 @@ export default {
     }
 
     & > .tfoot {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
+      @include table-config;
 
       & > .tr-totalizator {
-        color: #5E6784;
-        background-color: #E7E9F0;
+        color: $text-color;
+        background-color: $background-color;
 
         & > .th-totalizator {
-
           // fix - make dynamic based on prop selectable
           &:first-child { width: 50px; }
         }
