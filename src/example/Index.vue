@@ -10,11 +10,12 @@
       :current-page="2"
       :per-page="5"
       @search="synchronizeSearch"
+      max-height="200px"
       selectable
       sortable
-      paginable
       pagination-type="ellipsised"
     />
+      <!-- paginable -->
   </section>
 </template>
 
