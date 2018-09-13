@@ -2,73 +2,79 @@
   <div v-if="hasValid" class="c-table-builder" id="app">
     <slot name="filters">
       <filters label="Filtrar por: " :search="search" v-on="$listeners" />
-    </slot>  
+    </slot>
 
     <div v-if="!isEmpty" class="table-container">
       <table class="table">
-        <tr class="tr-col">
-          <th v-if="selectable">
-            <input type="checkbox" @click="$selectedAll" />
-          </th>
-
-          <slot name="col" :cols="cols">
-            <th
-              v-for="({ label, row }, index) in cols"
-              :key="index"
-              class="th-col"
-            >
-              <!-- to do -->
-              <slot name="icon-sortable">
-                <span
-                  v-if="sortable"
-                  class="icon-sortable-all"
-                  @click="$handlerSort(row, index)"
-                >
-                  {{ iconToSort }}
-                </span>
-              </slot>
-              <span>{{ label }}</span>
+        <thead class="thead">
+          <tr class="tr-col">
+            <th v-if="selectable" class="th-col-selectable">
+              <input type="checkbox" @click="$selectedAll" />
             </th>
-          </slot>
-        </tr>
 
-        <tr
-          class="tr-row"
-          v-for="(row, index) in _rows"
-          :key="index"
-        >
-          <th v-if="selectable">
-            <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
-          </th>
+            <slot name="col" :cols="cols">
+              <th
+                v-for="({ label, row }, index) in cols"
+                :key="index"
+                class="th-col"
+              >
+                <!-- to do -->
+                <slot name="icon-sortable">
+                  <span
+                    v-if="sortable"
+                    class="icon-sortable-all"
+                    @click="$handlerSort(row, index)"
+                  >
+                    {{ iconToSort }}
+                  </span>
+                </slot>
+                <span>{{ label }}</span>
+              </th>
+            </slot>
+          </tr>
+        </thead>
 
-          <slot name="row" :rows="row" :cols="cols">
-            <td
-              class="td-row"
-              v-for="(_, _index) in cols.length"
-              :key="_index"
-            >
-              <span class="row">{{ getRow(row, _index) }}</span>
-            </td>
-          </slot>
-        </tr>
+        <tbody :class="tbodyClass" :style="{ maxHeight }">
+          <tr
+            class="tr-row"
+            v-for="(row, index) in _rows"
+            :key="index"
+          >
+            <th v-if="selectable" class="th-row-selectable">
+              <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
+            </th>
+
+            <slot name="row" :rows="row" :cols="cols">
+              <td
+                class="td-row"
+                  v-for="(_, _index) in cols.length"
+                  :key="_index"
+                >
+                  <span class="row">{{ getRow(row, _index) }}</span>
+                </td>
+              </slot>
+            </tr>
+        </tbody>
 
         <slot name="total">
-          <tr
-            v-if="total"
-            class="tr-totalizator"
-          >
-            <th
-              class="th-totalizator"
-              v-for="(_total, index) in totals"
-              :key="index"
+          <tfoot class="tfoot">
+            <tr
+              v-if="total"
+              class="tr-totalizator"
             >
-              <span >{{ _total }}</span>
-            </th>
-          </tr>
+              <th
+                class="th-totalizator"
+                v-for="(_total, index) in totals"
+                :key="index"
+              >
+                <span >{{ _total }}</span>
+              </th>
+            </tr>
+          </tfoot>
         </slot>
       </table>
 
-      <pagination 
+      <pagination
         v-if="paginable"
         :pages="pages"
         :page="page"
@@ -117,6 +123,9 @@ export default {
     rows: {
       type: Array,
       required: true
+    },
+    maxHeight: {
+      type: String
     },
     empty: {
       type: String,
@@ -210,12 +219,16 @@ export default {
       return rowsWithoutGaps
     },
 
+    tbodyClass () {
+      return ['tbody', { '-max-heigth': this.maxHeight }]
+    },
+
     totals () {
       const sum = prop => (total, obj) =>
         (typeof obj[prop] === 'number' && total + ((obj[prop]) || 0)) || '-'
-        
+
       const makeSum = prop => this.dataTable.reduce(sum(prop), 0)
-        
+
       const makeLabel = row => (row === this.total.colPosition && this.total.label) || null
 
       const total = ({ row, hasTotal }) => hasTotal ? makeSum(row) : makeLabel(row)
@@ -253,40 +266,67 @@ export default {
 <style lang="scss">
 .c-table-builder > .table-container {
   & > .table {
-    width: 100%;
+    & > .thead {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
 
-    & > .tr-col {
-      background-color: #E7E9F0;
+      & > .tr-col {
+        background-color: #E7E9F0;
 
-      & > .th-col {
+        & > .th-col-selectable { width: 50px; }
+        & > .th-col {
+          color: #5E6784;
+          min-width: 100px;
+
+          & > .icon-sortable-all {
+            cursor: pointer;
+          }
+
+          & > .icon-sortable-one {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    & > .tbody {
+      display: block;
+
+      & > .tr-row {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        border: 1px solid #E7E9F0;
+
+        & > .th-row-selectable { width: 50px; }
+        & > .td-row {
+          text-align: center;
+          & > .row { color: #5E6784; }
+        }
+      }
+    }
+
+    & .-max-heigth {
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    & > .tfoot {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+
+      & > .tr-totalizator {
         color: #5E6784;
-        min-width: 100px;
+        background-color: #E7E9F0;
 
-        & > .icon-sortable-all {
-          cursor: pointer;
-        }
+        & > .th-totalizator {
 
-        & > .icon-sortable-one {
-          cursor: pointer;
+          // fix - make dynamic based on prop selectable
+          &:first-child { width: 50px; }
         }
       }
-    }
-
-    & > .tr-row {
-      border: 1px solid #E7E9F0;
-
-      & > .td-row {
-        text-align: center;
-
-        & > .row { color: #5E6784; }
-      }
-    }
-
-    & > .tr-totalizator {
-      color: #5E6784;
-      background-color: #E7E9F0;
-
-      & > .th-totalizator {}
     }
   }
 
