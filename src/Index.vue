@@ -20,11 +20,7 @@
               >
                 <!-- to do -->
                 <slot name="icon-sortable">
-                  <span
-                    v-if="sortable"
-                    class="icon-sortable-all"
-                    @click="$handlerSort(row, index)"
-                  >
+                  <span v-if="sortable" class="icon-sortable-all" @click="$handlerSort(row, index)">
                     {{ iconToSort }}
                   </span>
                 </slot>
@@ -50,16 +46,9 @@
 
         <slot name="total">
           <tfoot class="tfoot">
-            <tr
-              v-if="total"
-              class="tr-totalizator"
-            >
-              <th
-                class="th-totalizator"
-                v-for="(_total, index) in totals"
-                :key="index"
-              >
-                <span >{{ _total }}</span>
+            <tr v-if="total" class="tr-totalizator">
+              <th class="th-totalizator" v-for="(total, index) in totals" :key="index">
+                <span >{{ total }}</span>
               </th>
             </tr>
           </tfoot>
@@ -189,15 +178,6 @@ export default {
     }
   },
 
-  beforeDestroy () {
-    const tbody = this.$el.querySelector('.tbody')
-
-    if (this.maxHeight) {
-      tbody.removeEventListener('scroll', this.getBottomPosition)
-      tbody.removeEventListener('scroll', this.getTopPosition)
-    }
-  },
-
   watch: {
     '$refs.tbody': {
       handler: 'getBottomPosition',
@@ -247,8 +227,7 @@ export default {
     },
 
     totals () {
-      const sum = prop => (total, obj) =>
-        (typeof obj[prop] === 'number' && total + ((obj[prop]) || 0)) || '-'
+      const sum = prop => (total, obj) => (typeof obj[prop] === 'number' && total + ((obj[prop]) || 0)) || '-'
 
       const makeSum = prop => this.dataTable.reduce(sum(prop), 0)
 
@@ -296,6 +275,15 @@ export default {
 
         this.hasBottomShadow = final
       })
+    }
+  },
+
+  beforeDestroy () {
+    const tbody = this.$el.querySelector('.tbody')
+
+    if (this.maxHeight) {
+      tbody.removeEventListener('scroll', this.getBottomPosition)
+      tbody.removeEventListener('scroll', this.getTopPosition)
     }
   },
 
