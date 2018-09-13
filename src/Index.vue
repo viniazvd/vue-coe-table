@@ -270,6 +270,7 @@ export default {
       display: table;
       width: 100%;
       table-layout: fixed;
+      border: 1px solid #E7E9F0;
 
       & > .tr-col {
         background-color: #E7E9F0;
