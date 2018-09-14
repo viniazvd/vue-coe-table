@@ -1,7 +1,7 @@
 <h1 align="center">vue-coe-table ✅</h1>
 
 <p align="center">
-  <q>Yeap, another Vue table component. This one is based on ✨ <a href="https://github.com/VitorLuizC/vue-data-tablee">vue-data-tablee</a>✨</q>
+  <q>This library was inspired by ✨ <a href="https://github.com/VitorLuizC/vue-data-tablee">vue-data-tablee</a>✨</q>
 </p>
 <p align="center">
   ✨ <a href="#">Example</a>✨
@@ -88,3 +88,16 @@ export default {
   />
 </template>
 ```
+
+## Component Props
+
+Name         | Type              | Default  | Required | About
+----         | ----              | -------  |          | -----
+cols         | `Array.<Object>`  |          |   true   | Cols list.
+rows         | `Array.<Object>`  |          |   true   | Rows list.
+total        | `Object`          |          |   true   | Total list.
+gap          | `String`          | `''`     |   false  | Empty cell's character.
+search       | `String`          |          | false(*) | Is required if 'search-params' is set
+searchParams | `Array.<String>`  |          |   false  | Must correspond some property of the row (accepts multiple options
+)
+selectable   | `Boolean`         | `false`  |   false  | Add checkbox column to select a row. It emits event on change
