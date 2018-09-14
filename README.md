@@ -98,7 +98,6 @@ rows         | `Array.<Object>`  |          |   true   | Rows list.
 total        | `Object`          |          |   true   | Total list.
 gap          | `String`          | `''`     |   false  | Empty cell's character.
 search       | `String`          |          | false(*) | Is required if 'search-params' is set
-searchParams | `Array.<String>`  |          |   false  | Must correspond some property of the row (accepts multiple options
-)
+searchParams | `Array.<String>`  |          |   false  | Must correspond some property of the row (accepts multiple options)
 selectable   | `Boolean`         | `false`  |   false  | Add checkbox column to select a row. It emits event on change
  
