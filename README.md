@@ -11,8 +11,9 @@
 </p>
 
 **Install**
-
+ 
 `yarn add --dev vue-coe-table@latest`
+`(package has not yet been registered)`
 
 **Include Plugin**
 ```javascript
