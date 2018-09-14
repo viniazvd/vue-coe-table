@@ -1,7 +1,7 @@
 <h1 align="center">vue-coe-validator ✅</h1>
 
 <p align="center">
-  <q>Another validation form for the Vue. Validates input fields of multiple forms and displays errors. Note: without any dependencies.</q>
+  <q>Yeap, another Vue table component. This one is based on [vue-data-tablee][0]</q>
 </p>
 
 <p align="center">
