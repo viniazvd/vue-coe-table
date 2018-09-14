@@ -1,17 +1,13 @@
 <h1 align="center">vue-coe-table ✅</h1>
 
 <p align="center">
-  <q>Yeap, another Vue table component. This one is based on ✨ <a href="https://codesandbox.io/s/github/viniazvd/vue-coe-validator-example">vue-data-tablee</a>✨</q>
+  <q>Yeap, another Vue table component. This one is based on ✨ <a href="https://github.com/VitorLuizC/vue-data-tablee">vue-data-tablee</a>✨</q>
 </p>
 <p align="center">
-  ✨ <a href="https://codesandbox.io/s/github/viniazvd/vue-coe-validator-example">Example</a>✨
+  ✨ <a href="#">Example</a>✨
 </p>
 <p align="center">
   <a href="https://github.com/cj/vuelidation/blob/master/LICENSE.md"><img src="https://img.shields.io/npm/l/vuelidation.svg" alt="License" target="_blank"></a>
-</p>
-
-<p align="center">
-  ✨ <a href="https://codesandbox.io/s/github/viniazvd/vue-coe-validator-example">Example</a>✨
 </p>
 
 **Install**
