@@ -1,7 +1,7 @@
 <h1 align="center">vue-coe-table ✅</h1>
 
 <p align="center">
-  <q>This library was inspired by ✨ <a href="https://github.com/VitorLuizC/vue-data-tablee">vue-data-tablee</a>✨</q>
+  <q>This library was inspired by <a href="https://github.com/VitorLuizC/vue-data-tablee">vue-data-tablee</a></q>
 </p>
 <p align="center">
   ✨ <a href="#">Example</a>✨
