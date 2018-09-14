@@ -1,4 +1,4 @@
-<h1 align="center">vue-coe-validator ✅</h1>
+<h1 align="center">vue-coe-table ✅</h1>
 
 <p align="center">
   <q>Yeap, another Vue table component. This one is based on [vue-data-tablee][0]</q>
