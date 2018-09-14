@@ -36,7 +36,7 @@ export default {
 </script>
 ```
 
-**Basic Use**
+**Basic Example**
 ```vue
 <template>
   <table-builder :cols="cols" :rows="rows" />
@@ -66,7 +66,7 @@ export default {
 </script>
 ```
 
-**Full Use**
+**Full Example**
 ```vue
 <template>
   <table-builder
