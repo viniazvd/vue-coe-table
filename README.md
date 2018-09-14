@@ -91,13 +91,26 @@ export default {
 
 ## Component Props
 
-Name         | Type                  | Default  | Required | About
-----         | ----                  | -------  | -------  | -----
-cols         | `Array<Obj>`          |          |   true   | Cols list.
-rows         | `Array<Obj>`          |          |   true   | Rows list.
-total        | `Object`              |          |   true   | Total list.
-gap          | `String`              | `''`     |   false  | Empty cell's character.
-search       | `String`              |          | false(*) | Is required if 'search-params' is set
-searchParams | `Array<Str>`          |          |   false  | Must correspond some property of the row (accepts multiple options)
-selectable   | `Boolean`             | `false`  |   false  | Add checkbox column to select a row. It emits event on change
+Name           | Type              | Default  | Required | About
+----           | --------          | -------  | -------  | -----
+cols           | `Array<Obj>`      |          |   true   | Cols list
+rows           | `Array<Obj>`      |          |   true   | Rows list
+total          | `Object`          |          |   true   | Total list
+gap            | `String`          | `''`     |   false  | Empty cell's character
+
+maxHeight      | `String`          | `''`     |   false  | Set fixed table size. Note: It does not work with pagination!
+
+search         | `String`          |          | false(*) | Is required if 'search-params' is set
+searchParams   | `Array<Str>`      |          |   false  | Must correspond some property of the row (accepts multiple options)
+
+selectable     | `Boolean`         | `false`  |   false  | Add checkbox column to select a row. It emits event on change
+
+sortable       | `Boolean`         | `false`  |   false  | Add option to sort the fields by clicking the column icon
+
+paginable      | `Boolean`         | `false`  |   false  | Adds pagination
+paginationType | `String`          | `false`  |   false  | Has two types: 'full' and 'ellipsised'
+paginate       | `Object`          | `{}   `  |   false  | If your pagination comes from an API
+currentPage    | `Number, String`  | `1`      |   false  | Current page.
+perPage        | `Number, String`  | `10`     |   false  | Obs: needs to be greater than 2
+pagesLimit     | `Number, String`  | `false`  |   false  | Obs: needs to be greater than 3
 
