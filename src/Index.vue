@@ -30,7 +30,7 @@
           </tr>
         </thead>
 
-        <tbody :class="tbodyClass" :style="{ maxHeight: maxHeight + 'px' }" ref="tbody">
+        <tbody :class="tbodyClass" :style="style" ref="tbody">
           <tr class="tr-row" v-for="(row, index) in _rows" :key="index">
             <th v-if="selectable" class="th-row-selectable">
               <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
@@ -172,6 +172,13 @@ export default {
       }]
     },
 
+    style () {
+      return {
+        'maxHeight': this.maxHeight + 'px',
+        '--tbody-bottom': (this.maxHeight - 15) + 'px'
+      }
+    },
+
     totals () {
       const sum = prop => (total, obj) => (typeof obj[prop] === 'number' && total + (+(obj[prop]) || 0)) || '-'
 
@@ -255,12 +262,12 @@ export default {
 
       &.-has-top-shadow::before {
         @include shadow;
-        top: 20px;
+        top: 10px;
       }
 
       &.-has-bottom-shadow::after {
         @include shadow;
-        bottom: 25px;
+        top: var(--tbody-bottom);
       }
     }
 
