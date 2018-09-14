@@ -1,4 +1,8 @@
 const selectable = {
+  props: {
+    selectable: Boolean
+  },
+
   data () {
     return {
       checkeds: [],
@@ -15,7 +19,7 @@ const selectable = {
       if (!this.allChecked) {
         this.allChecked = true
         this.checkeds = this.rows
-        
+
         this.$emit('selected-all', { page: this._rows, table: this.rows })
       } else {
         this.allChecked = false

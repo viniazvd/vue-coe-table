@@ -1,6 +1,33 @@
 import findBy from '../helpers/findBy'
 
 const paginable = {
+  props: {
+    paginable: Boolean,
+    paginationType: {
+      type: String,
+      validator: type => (['full', 'ellipsised'].includes(type)),
+      default: 'full'
+    },
+    paginate: {
+      type: Object,
+      default: () => ({})
+    },
+    currentPage: {
+      type: [Number, String],
+      validator: (page) => !!page,
+      default: 1
+    },
+    perPage: {
+      type: [Number, String],
+      validator: limit => limit > 2,
+      default: 10
+    },
+    pagesLimit: {
+      type: [Number, String],
+      validator: limit => limit > 3
+    }
+  },
+
   data () {
     return {
       page: this.currentPage

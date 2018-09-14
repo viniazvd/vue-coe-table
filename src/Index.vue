@@ -30,7 +30,7 @@
           </tr>
         </thead>
 
-        <tbody :class="tbodyClass" :style="{ maxHeight: maxHeight + 'px' }" ref="tbody">
+        <tbody :class="tbodyClass" :style="style" ref="tbody">
           <tr class="tr-row" v-for="(row, index) in _rows" :key="index">
             <th v-if="selectable" class="th-row-selectable">
               <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
@@ -108,42 +108,12 @@ export default {
       type: Array,
       required: true
     },
-    empty: {
-      type: String,
-      default: () => '-'
-    },
     total: Object,
     search: String,
     searchParams: {
       // array of strings
       // required if paginable
       type: Array
-    },
-    selectable: Boolean,
-    sortable: Boolean,
-    paginable: Boolean,
-    paginationType: {
-      type: String,
-      validator: type => (['full', 'ellipsised'].includes(type)),
-      default: 'full'
-    },
-    paginate: {
-      type: Object,
-      default: () => ({})
-    },
-    currentPage: {
-      type: [Number, String],
-      validator: (page) => !!page,
-      default: 1
-    },
-    perPage: {
-      type: [Number, String],
-      validator: limit => limit > 2,
-      default: 10
-    },
-    pagesLimit: {
-      type: [Number, String],
-      validator: limit => limit > 3
     }
   },
 
@@ -170,6 +140,13 @@ export default {
         '-has-top-shadow': !this.paginable && !!this.maxHeight && !this.hasTopShadow,
         '-has-bottom-shadow': !this.paginable && !!this.maxHeight && !this.hasBottomShadow
       }]
+    },
+
+    style () {
+      return {
+        'maxHeight': this.maxHeight + 'px',
+        '--tbody-bottom': (this.maxHeight - 15) + 'px'
+      }
     },
 
     totals () {
@@ -204,7 +181,7 @@ export default {
     getRow (row, index) {
       const props = this.cols.map(({ row }) => row)
 
-      return row[props[index]] || this.empty
+      return row[props[index]] || ''
     }
   },
 
@@ -255,12 +232,12 @@ export default {
 
       &.-has-top-shadow::before {
         @include shadow;
-        top: 20px;
+        top: 10px;
       }
 
       &.-has-bottom-shadow::after {
         @include shadow;
-        bottom: 25px;
+        top: var(--tbody-bottom);
       }
     }
 
