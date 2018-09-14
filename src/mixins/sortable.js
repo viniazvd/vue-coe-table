@@ -1,6 +1,10 @@
 import toggleOrder from '../helpers/order'
 
 const sortable = {
+  props: {
+    sortable: Boolean
+  },
+
   watch: {
     page () {
       this.iconToSort = '▼'

@@ -108,42 +108,12 @@ export default {
       type: Array,
       required: true
     },
-    empty: {
-      type: String,
-      default: () => '-'
-    },
     total: Object,
     search: String,
     searchParams: {
       // array of strings
       // required if paginable
       type: Array
-    },
-    selectable: Boolean,
-    sortable: Boolean,
-    paginable: Boolean,
-    paginationType: {
-      type: String,
-      validator: type => (['full', 'ellipsised'].includes(type)),
-      default: 'full'
-    },
-    paginate: {
-      type: Object,
-      default: () => ({})
-    },
-    currentPage: {
-      type: [Number, String],
-      validator: (page) => !!page,
-      default: 1
-    },
-    perPage: {
-      type: [Number, String],
-      validator: limit => limit > 2,
-      default: 10
-    },
-    pagesLimit: {
-      type: [Number, String],
-      validator: limit => limit > 3
     }
   },
 
@@ -211,7 +181,7 @@ export default {
     getRow (row, index) {
       const props = this.cols.map(({ row }) => row)
 
-      return row[props[index]] || this.empty
+      return row[props[index]] || ''
     }
   },
 
