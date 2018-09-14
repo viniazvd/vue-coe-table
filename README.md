@@ -26,10 +26,6 @@ Vue.use(CoeTable)
 You can also import just components you need, without installing globally.
 
 ```vue
-<template>
-  <data-table :rows="rows" :cols="cols" />
-</template>
-
 <script>
 import CoeTable from 'vue-coe-table'
 
