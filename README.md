@@ -109,3 +109,16 @@ currentPage    | `Number, String`  | `1`      |   false  | Current page.
 perPage        | `Number, String`  | `10`     |   false  | Obs: needs to be greater than 2
 pagesLimit     | `Number, String`  | `false`  |   false  | Obs: needs to be greater than 3
 
+## Slots
+<p>You can generate the table automatically, or use slots</p>
+**options:**
+<p style='margin: 0; '>
+  <ul style='margin: 0; padding: 0; list-style-type: none;'>
+    <li>actions</li>
+    <li>col => <i>slot-scope="{ col }</i></li> 
+    <li>icon-sortable</li>
+    <li>row => <i>slot-scope="{ row, cols }</li>
+    <li>total</li>
+  </ul>
+</p>
+
