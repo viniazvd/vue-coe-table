@@ -101,3 +101,4 @@ search       | `String`          |          | false(*) | Is required if 'search-
 searchParams | `Array.<String>`  |          |   false  | Must correspond some property of the row (accepts multiple options
 )
 selectable   | `Boolean`         | `false`  |   false  | Add checkbox column to select a row. It emits event on change
+ 
