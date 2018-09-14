@@ -92,12 +92,12 @@ export default {
 ## Component Props
 
 Name           | Type              | Default  | Required | About
-----           | --------          | -------  | -------  | -----
+----           | -----------       | -------  | -------  | -----
 cols           | `Array<Obj>`      |          |   true   | Cols list
 rows           | `Array<Obj>`      |          |   true   | Rows list
 total          | `Object`          |          |   true   | Total list
-gap            | `String`          | `''`     |   false  | Empty cell's character
-maxHeight      | `String`          | `''`     |   false  | Set fixed table size. Note: It does not work with pagination!
+gap            | `String`          | `  ''`   |   false  | Empty cell's character
+maxHeight      | `String`          | `  `     |   false  | Set fixed table size. Obs: It does not work with pagination!
 search         | `String`          |          | false(*) | Is required if 'search-params' is set
 searchParams   | `Array<Str>`      |          |   false  | Must correspond some property of the row (accepts multiple options)
 selectable     | `Boolean`         | `false`  |   false  | Add checkbox column to select a row. It emits event on change
