@@ -32,9 +32,9 @@
 
         <tbody :class="tbodyClass" :style="style" ref="tbody">
           <tr class="tr-row" v-for="(row, index) in _rows" :key="index">
-            <th v-if="selectable" class="th-row-selectable">
+            <td v-if="selectable" class="td-row-selectable">
               <input type="checkbox" :value="row" v-model="checkeds" @change="$selected(row)" />
-            </th>
+            </td>
 
             <slot name="row" :rows="row" :cols="cols">
               <td class="td-row" v-for="(_, _index) in cols.length" :key="_index" ref="">
@@ -193,10 +193,14 @@ export default {
 
 <style lang="scss">
 @import './style/index.scss';
-
 .c-table-builder > .table-container {
   & > .table {
     position: relative;
+
+    // fix - max-width must be the size of the table
+    @media only screen and (max-width: 677px) {
+      @include lateral-responsiveness;
+    }
 
     & > .thead {
       @include table-config;
@@ -219,13 +223,35 @@ export default {
     & > .tbody {
       display: block;
 
+      width: 100vh;
+
       & > .tr-row {
         @include table-config;
+        width: 100%;
         border: $border;
 
-        & > .th-row-selectable { width: 50px; }
+        & > .td-row-selectable {
+          width: 50px;
+          text-align: center;
+
+          &:first-child {
+            background-image: linear-gradient(to right, rgba(255,255,255, 1) 50%, rgba(255,255,255, 0) 100%);
+            background-repeat: no-repeat;
+            background-size: 20px 100%;
+          }
+        }
         & > .td-row {
           text-align: center;
+
+          &:first-child {
+            @include lateral-pagination;
+          }
+
+          &:last-child {
+            @include lateral-pagination;
+            background-position: 100% 0;
+          }
+
           & > .row { color: $text-color; }
         }
       }
