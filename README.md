@@ -12,7 +12,7 @@
 
 **Install**
  
-`yarn add --dev vue-coe-table@latest`
+`yarn add vue-coe-table@latest`
 `(package has not been registered yet)`
 
 **Include Plugin**
