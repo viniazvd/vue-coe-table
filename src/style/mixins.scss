@@ -13,6 +13,25 @@
 
 @mixin table-config {
   display: table;
-  width: 100%;
+  width: 100vh;
   table-layout: fixed;
+}
+
+@mixin lateral-responsiveness {
+  overflow: auto;
+  display: block;
+
+  background:
+    radial-gradient(ellipse, rgba(0,0,0, .3) 0%, rgba(0,0,0, 0) 75%),
+    radial-gradient(ellipse, rgba(0,0,0, .3) 0%, rgba(0,0,0, 0) 75%);
+  background-size: 10px 100%, 10px 100%;
+  background-position: -3px center, calc(100% + 3px) center;
+  background-repeat: no-repeat;
+  background-color: #fff;
+}
+
+@mixin lateral-pagination {
+  background-image: linear-gradient(to right, rgba(255,255,255, 1) 50%, rgba(255,255,255, 0) 100%);
+  background-repeat: no-repeat;
+  background-size: 20px 100%;
 }
